@@ -37,6 +37,7 @@ ronde(1).
 
 /* kartu(Warna, NamaPemain) */
 /* Pada awalnya setiap pemain akan diberi 4 kartu berwarna */
+:- dynamic(kartu/2).
 
 /* unta(Warna, Posisi, Tumpuk) */
 /* Warna : string, Posisi : integer, Tumpuk : List of WarnaUnta string */
@@ -44,21 +45,25 @@ ronde(1).
 unta("Merah", 0, []).
 unta("Kuning", 0, []).
 unta("Hijau", 0, []).
-unta("Biru", 0, []).
+unta("Biru", 0, []). 
 unta("Putih", 16, []).
 
 /* jumlahPemain(Jumlah) */
 /* Jumlah : integer */
 /* Jumlah pemain akan diinputkan oleh user */
+:- dynamic(jumlahPemain/1).
 
-/* pemain(Nama, Poin, Action) */
-/* Nama : string, Poin : integer, Action : string */
+/* pemain(Nama, Poin, Trap, Action) */
+/* Nama : string, Poin : integer, Trap : integer, Action : string */
 /* Poin memiliki nilai inisial */
+/* Trap menyimpan jumlah trap yang dimiliki pemain */
 /* Action akan diupdate setiap kali pemain melakukan aksi */
 /* Jika belum melakukan aksi, Action = "Belum" */
+:- dynamic(pemain/4).
 
 /* urutanPemain(Urutan) */
 /* Urutan : List of NamaPemain string */
+:- dynamic(urutanPemain/1).
 
 /* urutanInvestasi(WarnaUnta, Urutan) */
 /* WarnaUnta : string, Urutan : List of NamaPemain string */
