@@ -1,5 +1,3 @@
-:- include('./facts.pl').
-
 /* Validasi Trap */
 
 /* Validasi trap != S/F/Invalid Petak/Bersebelahan/Pada lokasi sudah ada trap */
@@ -87,6 +85,7 @@ pasangTrap :-
 /* Misc */
 
 /* Fact for testing (error kalo dynamic nya di tulis di facts trus include ke sini) */ 
+/*
 pemain('iqbal1', 30, 1, 2).
 pemain('iqbal2', 30, 3, 2).
 pemain('iqbal3', 30, 0, 2).
@@ -95,6 +94,7 @@ trap('kiri', 1, 'iqbal1').
 trap('kanan', 3, 'iqbal2').
 currentPemain(1).
 urutanPemain(['iqbal1', 'iqbal2', 'iqbal3', 'iqbal4']).
+*/
 
 /* Testing
 isTrapLocValid('S', Check, []).
