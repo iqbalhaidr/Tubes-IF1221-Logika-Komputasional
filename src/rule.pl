@@ -1,4 +1,3 @@
-:- include('./facts.pl').
 
 /* Fungsi/Prosedur */
 /* ======================================================================= */
@@ -11,6 +10,48 @@ inputJumlahPemain :-
     ;
         write('Mohon masukkan angka antara 2 - 4.'), nl, fail
     ).
+
+/* ======================================================================= */
+/* Reset Semua Data */
+resetGameData :-
+    /* Reset fakta dadu */
+    retractall(dadu(_)),
+    asserta(dadu("Merah")),
+    asserta(dadu("Kuning")),
+    asserta(dadu("Hijau")),
+    asserta(dadu("Biru")),
+    asserta(dadu("Putih")),
+
+    /* Reset ronde */
+    retractall(ronde(_)),
+    asserta(ronde(1)),
+
+    /* Reset kartu */
+    retractall(kartu(_, _)),
+
+    /* Reset unta */
+    retractall(unta(_, _, _)),
+    asserta(unta("Merah", 0, [])),
+    asserta(unta("Kuning", 0, [])),
+    asserta(unta("Hijau", 0, [])),
+    asserta(unta("Biru", 0, [])),
+    asserta(unta("Putih", 16, [])),
+
+    /* Reset pemain dan urutan */
+    retractall(jumlahPemain(_)),
+    retractall(pemain(_, _, _, _)),
+    retractall(urutanPemain(_)),
+
+    /* Reset investasi dan trap */
+    retractall(urutanInvestasi(_, _)),
+    asserta(urutanInvestasi(merah, [])),
+    asserta(urutanInvestasi(kuning, [])),
+    asserta(urutanInvestasi(hijau, [])),
+    asserta(urutanInvestasi(biru, [])),
+    retractall(urutanUnta(_, _, _, _, _)),
+    retractall(trap(_, _, _)),
+    
+    retractall(currentPemain(_)).
 
 /* ======================================================================= */
 
@@ -124,6 +165,7 @@ displayTrapPemain([Head|Tail]) :-
 /* ======================================================================= */
 
 startGame :-
+    resetGameData,
     inputJumlahPemain, nl,
     inputNamaPemain, nl,
     generateUrutanPemain,
@@ -132,4 +174,5 @@ startGame :-
     generateKartuPemain, nl,
     displayKartuPemain, nl,
     displayPoinPemain, nl,
-    displayTrapPemain.
+    displayTrapPemain,
+    currentPemain(1).
