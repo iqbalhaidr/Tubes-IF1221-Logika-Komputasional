@@ -24,6 +24,7 @@ poinInvestasi(4, 4, 0).
 
 /* dadu(Warna) */
 /* dadu akan dihapus satu persatu setelah dikocok. Lalu saat sudah habis akan ditambahkan lagi */
+:- dynamic(dadu/1).
 dadu("Merah").
 dadu("Kuning").
 dadu("Hijau").
@@ -33,6 +34,7 @@ dadu("Putih").
 /* ronde(Jumlah) */
 /* Jumlah akan diupdate setiap kali ronde selesai */
 /* Satu ronde selesai ketika semua dadu habis */
+:- dynamic(ronde/1).
 ronde(1).
 
 /* kartu(Warna, NamaPemain) */
@@ -42,6 +44,7 @@ ronde(1).
 /* unta(Warna, Posisi, Tumpuk) */
 /* Warna : string, Posisi : integer, Tumpuk : List of WarnaUnta string */
 /* Posisi unta pada awal game seperti berikut */
+:- dynamic(unta/3).
 unta("Merah", 0, []).
 unta("Kuning", 0, []).
 unta("Hijau", 0, []).
@@ -67,6 +70,7 @@ unta("Putih", 16, []).
 
 /* urutanInvestasi(WarnaUnta, Urutan) */
 /* WarnaUnta : string, Urutan : List of NamaPemain string */
+:- dynamic(urutanInvestasi/2).
 urutanInvestasi("Merah", []).
 urutanInvestasi("Kuning", []).
 urutanInvestasi("Hijau", []).
@@ -75,8 +79,13 @@ urutanInvestasi("Biru", []).
 /* urutanUnta(Pertama, Kedua, Ketiga, Keempat, Kelima) */
 /* Pertama, Kedua, Ketiga, Keempat, Kelima : WarnaUnta string */
 /* Urutan unta pada awal game seperti berikut */
+:- dynamic(urutanUnta/5).
 urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 
 /* trap(KiriAtauKana, Posisi, Pemilik) */
 /* KiriAtauKanan : string, Posisi : integer, Pemilik : NamaPemain string */
+:- dynamic(trap/3).
 
+/* currentPemain(NomorPemain) */
+/* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
+:- dynamic(currentPemain/1).
