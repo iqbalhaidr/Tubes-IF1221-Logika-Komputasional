@@ -1,9 +1,9 @@
-['src/facts.pl', 'src/rule.pl'].
 
 /* Validate Input From User */
 validasi_warna_kartu(Warna) :-
     kartu(Warna, _), !.  
 validasi_warna_kartu(_) :-
+    write('Gagal! putih bukan warna unta yang valid.'), nl,
     write('Silakan pilih warna yang valid (merah, kuning, hijau, biru).'), nl,
     fail. 
 
@@ -14,6 +14,10 @@ cek_kartu(Warna, Nama) :-
 /* Use Kartu if exist */
 pakai_kartu(Nama, Warna) :-
     format('Investasi berhasil! ~w telah berinvestasi pada unta ~w.~n', [Nama, Warna]),
+    urutanInvestasi(Warna, List),
+    append(List, [Nama], ListBaru),
+    retract(urutanInvestasi(Warna, List)),
+    assertz(urutanInvestasi(Warna, ListBaru)),
     retract(kartu(Warna, Nama)).
 
 gagal_pakai_kartu(Nama, Warna) :-
@@ -41,19 +45,22 @@ tampilkan_investasi_table(Warna) :-
     tampilkan_investasi(Warna).
 
 /* Display All papan_investasi */
-papan_investasi:-
-    tampilkan_investasi_table("Merah"),
-    write('~n~n'),
-    tampilkan_investasi_table("Kuning"),
-    write('~n~n'),
-    tampilkan_investasi_table("Hijau"),
-    write('~n~n'),
-    tampilkan_investasi_table("Biru"),
-    write('~n~n').
+papan_investasi :-
+    tampilkan_investasi_table(merah), 
+    nl,                                
+    tampilkan_investasi_table(kuning),  
+    nl,                                  
+    tampilkan_investasi_table(hijau),  
+    nl,                                  
+    tampilkan_investasi_table(biru), 
+    nl.    
 
 /* Investation rule */
 investasi:-
-    currentPemain(Nama),
+    currentPemain(NomorPemain),
+    urutanPemain(ListOfUrutan),
+    Index is NomorPemain-1,
+    nth0(Index, ListOfUrutan, Nama),
     write('Pilih warna unta untuk investasi (merah, kuning, hijau, biru): '),
     read(Warna),
     (   validasi_warna_kartu(Warna) ->
