@@ -79,6 +79,7 @@ urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 
 /* trap(KiriAtauKana, Posisi, Pemilik) */
 /* KiriAtauKanan : string, Posisi : integer, Pemilik : NamaPemain string */
+:- dynamic(trap/3).
 
 /* currentPemain(NomorPemain) */
 /* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
