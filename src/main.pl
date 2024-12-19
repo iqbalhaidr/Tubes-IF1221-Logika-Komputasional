@@ -1,0 +1,3 @@
+:- include('./facts.pl').
+:- include('./rule.pl').
+:- include('./info.pl').
