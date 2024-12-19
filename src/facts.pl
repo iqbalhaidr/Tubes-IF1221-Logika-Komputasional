@@ -82,4 +82,4 @@ urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 
 /* currentPemain(NomorPemain) */
 /* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
-:- dynamic(currentPemain/2).
+:- dynamic(currentPemain/1).
