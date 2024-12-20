@@ -153,26 +153,3 @@ tambahPoinEndgame(Pemain, Tambahan) :-
     asserta(pemain(Pemain, Poin1, Trap, Action)).
 
 /* ======================================================================= */
-
-/* Misc */
-
-:- dynamic(urutanUnta/5).
-:- dynamic(urutanInvestasi/2).
-:- dynamic(pemain/4).
-:- dynamic(unta/3).
-
-pemain('P1', 30, 1, 'Jalan').
-pemain('P2', 30, 3, 'Jalan').
-pemain('P3', 30, 0, 'Jalan').
-pemain('P4', 30, 2, 'Jalan').
-
-urutanInvestasi('Merah', ['P1']).
-urutanInvestasi('Kuning', []).
-urutanInvestasi('Hijau', []).
-urutanInvestasi('Biru', []).
-
-unta('Merah', 12, ['Kuning']).
-unta('Kuning', 12, []).
-unta('Hijau', 12, ['Merah', 'Kuning']).
-unta('Biru', 16, []). 
-unta('Putih', 8, []).
