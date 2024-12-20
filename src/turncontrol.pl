@@ -18,10 +18,12 @@ nextTurn :-
         asserta(ronde(NewRound)),
 
         revertAction
+    ;
+        nl
     ),
-    ( unta(_, 16, _) -> 
+    ( unta(Warna, 16, _), Warna \= "Putih" -> 
         write('Ada unta yang sampai di petak terakhir! Game akan berakhir.'), nl, nl,
         endgame
     ;
-        format('Giliran pemain berikutnya: ~d~n', [Next])
+        write('Giliran pemain berikutnya...'), nl
     ).
