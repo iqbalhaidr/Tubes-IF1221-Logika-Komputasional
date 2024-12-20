@@ -1,10 +1,20 @@
+get_element_unta([Element|_], 0, Element).
+get_element_unta([_|Tail], Index, Element) :- 
+    Index > 0,
+    NewIndex is Index - 1,
+    get_element_unta(Tail, NewIndex, Element).
+
+random_member(Element, List):-
+    random(0,5, Chosen),
+    get_element_unta(List, Chosen, Element).
+
 /* Mengocok Dadu */
 kocokDadu(Warna, Angka) :-
     findall(W, dadu(W), DaduWarna), 
     random_member(Warna, DaduWarna), 
-    random_between(1, 6, Angka), 
+    random(1, 7, Angka), 
     retract(dadu(Warna)), 
-    (DaduWarna = [Warna] -> 
+    (DaduWarna == [Warna] -> 
         forall(member(W, ["Merah", "Kuning", "Hijau", "Biru", "Putih"]), asserta(dadu(W)))
     ;
         true).
@@ -19,8 +29,7 @@ jalankanUnta :-
     write('Jalankan unta\n'),
     currentPemain(NomorPemain),
     urutanPemain(UrutanPemain),
-    Idx is NomorPemain - 1,
-    getNameFromUrutan(UrutanPemain, Idx, NamaPemain),
+    getNameFromUrutan(UrutanPemain, NomorPemain, NamaPemain),
     pemain(NamaPemain, Poin, Trap, Action),
     ( Action = belum ->
         kocokDadu(Warna, Angka),

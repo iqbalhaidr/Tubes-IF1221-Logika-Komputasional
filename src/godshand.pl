@@ -1,18 +1,20 @@
 godhand :-
     random(1, 101, Roll), % Generate angka acak 1-100
-    (   Roll =< 30 -> 
+    (   Roll =< 100 -> 
         write('TUHAN TELAH BERSABDA BERSIAPLAH KALIAN!!'), nl,
         pilih_asal(Asal), 
         (   ada_unta_di_petak(Asal, DaftarUnta), length(DaftarUnta, L), L \= 0 -> 
             random_tujuan(Asal, 16, Tujuan), 
             write('Tuhan memindahkan unta dari petak '), write(Asal), write(' ke '), write(Tujuan),nl,
-            pindahkan_unta(Asal, Tujuan)
+            pindahkan_unta(Asal, Tujuan),
+            cek_map
         ;
             write('Tuhan mengurungkan niatnya karena tidak ada unta di petak '), write(Asal), nl
         )
     ;
         write('God\'s Hand tidak terjadi kali ini.'), nl
-    ).
+    )
+    .
 
 pilih_asal(Asal) :-
     random(0, 16, Asal). 
