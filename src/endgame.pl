@@ -42,7 +42,7 @@ deleteElementEndgame([Head|Tail], Index, [Head|UpdatedTail]) :-
 listUrutanUntaTanpaPutih(ListFinal) :-
     urutanUnta(P1, P2, P3, P4, P5),
     ListTemp = [P1, P2, P3, P4, P5],
-    find_index_of_element(ListTemp, Idx, 'Putih'),
+    find_index_of_element(ListTemp, Idx, "Putih"),
     deleteElementEndgame(ListTemp, Idx, ListFinal).
 
 poinUtama(1, 50).
@@ -154,25 +154,3 @@ tambahPoinEndgame(Pemain, Tambahan) :-
 
 /* ======================================================================= */
 
-/* Misc */
-
-% :- dynamic(urutanUnta/5).
-% :- dynamic(urutanInvestasi/2).
-% :- dynamic(pemain/4).
-% :- dynamic(unta/3).
-
-% pemain('P1', 30, 1, 'Jalan').
-% pemain('P2', 30, 3, 'Jalan').
-% pemain('P3', 30, 0, 'Jalan').
-% pemain('P4', 30, 2, 'Jalan').
-
-% urutanInvestasi('Merah', ['P1']).
-% urutanInvestasi('Kuning', []).
-% urutanInvestasi('Hijau', []).
-% urutanInvestasi('Biru', []).
-
-% unta('Merah', 12, ['Kuning']).
-% unta('Kuning', 12, []).
-% unta('Hijau', 12, ['Merah', 'Kuning']).
-% unta('Biru', 16, []). 
-% unta('Putih', 8, []).
