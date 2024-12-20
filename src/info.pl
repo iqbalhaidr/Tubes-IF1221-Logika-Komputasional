@@ -82,12 +82,12 @@ parse_unta(String, Res) :-
         Res = 'UP'
     ).
 
-format_tumpukan([], ['[ ]']) :- !.
-format_tumpukan([Head], [HeadRes]) :-
+parse_unta_list([], []).
+parse_unta_list([Head], [HeadRes]) :- 
     parse_unta(Head, HeadRes), !.
-format_tumpukan([Head|Tail], [HeadRes|TailRes]) :-
+parse_unta_list([Head|Tail], [HeadRes|TailRes]) :-
     parse_unta(Head, HeadRes),
-    format_tumpukan(Tail, TailRes).
+    parse_unta_list(Tail, TailRes).
 
 stringify_tumpukan([], ['[ ]']) :- !.
 stringify_tumpukan([Head], Res) :-
@@ -97,13 +97,47 @@ stringify_tumpukan([Head|Tail], Res) :-
     atom_concat(Head, ' ', ResTemp),
     atom_concat(ResTemp, TailRes, Res).
 
-get_unta_in_tile(Pos, Res) :-
-    ( once(unta(_, Pos, Tumpukan)) -> 
-        format_tumpukan(Tumpukan, TumpukanRes),
-        stringify_tumpukan(TumpukanRes, Res)
+find_largest_tumpukan([], [], '  ', ['[ ]'], 0) :- !.
+find_largest_tumpukan([HeadWarna|TailWarna], [HeadTumpukan|TailTumpukan], MaxWarna, MaxTumpukan, MaxLen) :-
+    length(HeadTumpukan, Len),
+    find_largest_tumpukan(TailWarna, TailTumpukan, TempWarna, TempTumpukan, TempLen),
+    ( Len >= TempLen ->
+        MaxWarna = HeadWarna,
+        MaxTumpukan = HeadTumpukan,
+        MaxLen = Len
     ;
-        Res = '[ ]'
-    ), !.
+        MaxWarna = TempWarna,
+        MaxTumpukan = TempTumpukan,
+        MaxLen = TempLen
+    ),
+    !.
+
+find_all_unta(Pos, Res) :-
+    % Dua list di bawah dari fakta berurutan sama
+    findall(String, (unta(Warna, Pos, _), parse_unta(Warna, String)), ListWarna),
+    findall(Tumpukan, unta(_, Pos, Tumpukan), ListTumpukan),
+
+    % UntaTerbawah adalah string bentul 'UW' dan TumpukanTerbesar adalah list of string bentuk 'UW'
+    find_largest_tumpukan(ListWarna, ListTumpukan, UntaTerbawah, TumpukanTerbesar, _),
+    parse_unta_list(TumpukanTerbesar, TumpukanString),
+    append([UntaTerbawah], TumpukanString, Res).
+
+get_unta_in_tile(Pos, Res) :-
+    ( Pos =:= 0 -> 
+        findall(StringS, (unta(Warna, 0, _), parse_unta(Warna, StringS)), UntaStart),
+        findall(StringF, (unta(Warna, 16, _), parse_unta(Warna, StringF)), UntaFinish),
+        append(UntaStart, UntaFinish, UntaSF),
+            
+        stringify_tumpukan(UntaSF, Res)
+    ;
+        ( once(unta(_, Pos, _)) -> 
+            find_all_unta(Pos, UntaPos),
+
+            stringify_tumpukan(UntaPos, Res)
+        ;
+            Res = '  '
+        )
+    ).
 
 get_unta([Head], [HeadRes]) :-
     get_unta_in_tile(Head, HeadRes), !.
