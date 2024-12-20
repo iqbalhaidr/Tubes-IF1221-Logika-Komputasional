@@ -1,8 +1,9 @@
 /* Define Helper */
 
-concatList([], List2, List2).
-concatList([H|T], List2, [H|Result]) :-
-    concatList(T, List2, Result).
+concateList([], List2, List2).
+concateList([H|T], List2, Result) :-
+    append([H], R, Result),
+    concateList(T, List2, R).
 
 getLength(List, Length) :-
     length(List, Length).
@@ -23,6 +24,7 @@ lastUntaColor([X], X).
 lastUntaColor([_|Tail], Last) :-
     lastUntaColor(Tail, Last).
 
+deleteUntil(_, [], []).
 deleteUntil(Element, [], []).
 deleteUntil(Element, List, Result) :-
     lastUntaColor(List, Color),
@@ -110,7 +112,7 @@ moveSpesificUntaFromTile(UntaWhoMove, Source, Destination) :-
     findall(UntaSource, unta(UntaSource, Source, _), ListUntainSource),
     findall(UntaInDestination, unta(UntaInDestination, Destination, _), ListUntainDest),
     asserta(unta(UntaWhoMove, Destination, Stack)),
-    concateList(UntaWhoMove, Stack, ConcatedStack),
+    concateList([UntaWhoMove], Stack, ConcatedStack),
     updateSourceStackUnta(UntaWhoMove, Source, ListUntainSource),
     updateStackDestination(ConcatedStack, Destination, ListUntainDest),
     updateChildStackMovedUnta(Stack,Destination).
