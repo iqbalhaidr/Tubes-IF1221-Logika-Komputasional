@@ -1,6 +1,6 @@
 godhand :-
     random(1, 101, Roll), % Generate angka acak 1-100
-    (   Roll =< 100 -> 
+    (   Roll =< 30 -> 
         write('TUHAN TELAH BERSABDA BERSIAPLAH KALIAN!!'), nl,
         pilih_asal(Asal), 
         (   ada_unta_di_petak(Asal, DaftarUnta), length(DaftarUnta, L), L \= 0 -> 
