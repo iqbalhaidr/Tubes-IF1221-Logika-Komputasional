@@ -6,7 +6,6 @@ isTrapLocValid(Location, Check) :-
     isTrapLocValid(Location, Check, ListPosisi).
 
 isTrapLocValid('S', false, _) :- !.
-isTrapLocValid('F', false, _) :- !.
 isTrapLocValid(Location, false, _) :-
     char_code(Location, Code),
     char_code('A', A),
