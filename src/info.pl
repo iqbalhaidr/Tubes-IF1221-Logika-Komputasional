@@ -142,10 +142,10 @@ get_trap([Head|Tail], [HeadRes|TailRes]) :-
 
 cek_map :-
     % Trap testing purpose
-    asserta(trap('maju', 0, 1)),
-    asserta(trap('mundur', 2, 2)),
-    asserta(trap('maju', 10, 3)),
-    asserta(trap('mundur', 12, 4)),
+    % asserta(trap('maju', 0, 1)),
+    % asserta(trap('mundur', 2, 2)),
+    % asserta(trap('maju', 10, 3)),
+    % asserta(trap('mundur', 12, 4)),
 
     get_unta([0, 1, 2, 3, 4], UntaBarisPertama),
     get_unta([12, 11, 10, 9, 8], UntaBarisTerakhir),
