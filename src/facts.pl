@@ -71,10 +71,10 @@ unta("Putih", 16, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]).
 /* urutanInvestasi(WarnaUnta, Urutan) */
 /* WarnaUnta : string, Urutan : List of NamaPemain string */
 :- dynamic(urutanInvestasi/2).
-urutanInvestasi("Merah", []).
-urutanInvestasi("Kuning", []).
-urutanInvestasi("Hijau", []).
-urutanInvestasi("Biru", []).
+urutanInvestasi(merah, []).
+urutanInvestasi(kuning, []).
+urutanInvestasi(hijau, []).
+urutanInvestasi(biru, []).
 
 /* urutanUnta(Pertama, Kedua, Ketiga, Keempat, Kelima) */
 /* Pertama, Kedua, Ketiga, Keempat, Kelima : WarnaUnta string */
@@ -89,3 +89,5 @@ urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 /* currentPemain(NomorPemain) */
 /* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
 :- dynamic(currentPemain/1).
+
+currentPemain(1).
