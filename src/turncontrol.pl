@@ -3,6 +3,7 @@ revertAction :-
     retract(pemain(Nama, Poin, Trap, Action)),
     asserta(pemain(Nama, Poin, Trap, belum)),
     fail.
+revertAction.
 
 
 /* Fungsi untuk melanjutkan ke giliran berikutnya */

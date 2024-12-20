@@ -97,7 +97,7 @@ stringify_tumpukan([Head|Tail], Res) :-
     atom_concat(Head, ' ', ResTemp),
     atom_concat(ResTemp, TailRes, Res).
 
-find_largest_tumpukan([], [], '  ', ['[ ]'], 0) :- !.
+find_largest_tumpukan([], [], '  ', [], 0) :- !.
 find_largest_tumpukan([HeadWarna|TailWarna], [HeadTumpukan|TailTumpukan], MaxWarna, MaxTumpukan, MaxLen) :-
     length(HeadTumpukan, Len),
     find_largest_tumpukan(TailWarna, TailTumpukan, TempWarna, TempTumpukan, TempLen),
@@ -127,8 +127,12 @@ get_unta_in_tile(Pos, Res) :-
         findall(StringS, (unta(Warna, 0, _), parse_unta(Warna, StringS)), UntaStart),
         findall(StringF, (unta(Warna, 16, _), parse_unta(Warna, StringF)), UntaFinish),
         append(UntaStart, UntaFinish, UntaSF),
-            
-        stringify_tumpukan(UntaSF, Res)
+        
+        ( UntaSF = [] -> 
+            Res = '  '
+        ;
+            stringify_tumpukan(UntaSF, Res)
+        )
     ;
         ( once(unta(_, Pos, _)) -> 
             find_all_unta(Pos, UntaPos),
@@ -173,7 +177,25 @@ get_trap([Head|Tail], [HeadRes|TailRes]) :-
     get_trap(Tail, TailRes).
 
 /* ======================================================================= */
+/* Info pemain */
+get_pemain_number([Head|_], 1, Head) :- !.
+get_pemain_number([_|Tail], Number, Name) :-
+    Number > 1,
+    NextNumber is Number - 1,
+    get_pemain_number(Tail, NextNumber, Name).
+get_pemain(Number, Name) :-
+    urutanPemain(ListName),
+    get_pemain_number(ListName, Number, Name).
 
+get_pemain_poin(Number, Poin) :-
+    get_pemain(Number, Name),
+    pemain(Name, Poin, _, _).
+
+get_pemain_trap_position(Number, TrapPosition) :-
+    get_pemain(Number, Name),
+    trap(_, TrapPosition, Name).
+
+/* ======================================================================= */
 cek_map :-
     % Trap testing purpose
     % asserta(trap('maju', 0, 1)),
