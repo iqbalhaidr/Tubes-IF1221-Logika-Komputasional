@@ -62,7 +62,10 @@ findPosisiMove(Warna, Posisi, Angka, PosisiBaru) :-
         (PosisiBaruTemp < 1 ->
             PosisiBaru = 1
         ; PosisiBaru = PosisiBaruTemp)
-    ; PosisiBaru is Posisi + Angka).
+    ; PosisiBaruTemp is Posisi + Angka,
+        (PosisiBaruTemp > 16 ->
+            PosisiBaru = 16
+        ; PosisiBaru = PosisiBaruTemp)).
 
 /* Tukar Unta */
 tukarUnta :-
