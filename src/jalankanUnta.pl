@@ -135,6 +135,10 @@ isKenaTrap(PosisiBaru, PosisiFinal) :-
         ; PosisiFinal is PosisiBaru - 1)
     ; PosisiFinal = PosisiBaru).
 
+intToStrJalankan(Angka, Huruf) :-
+    (Angka == 0 -> Huruf = "Start"
+    ; HurufCode is Angka + 64, char_code(Huruf, HurufCode)).
+
 jalankanUnta :- 
     write('Jalankan unta\n'),
     currentPemain(NomorPemain),
@@ -152,7 +156,8 @@ jalankanUnta :-
         NewPoin is Poin + 10,
         retract(pemain(NamaPemain, Poin, Trap, Action)),
         asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
-        format('~nUnta ~s berpindah ke petak ~d~n', [Warna, PosisiFinal])
+        intToStrJalankan(PosisiFinal, HurufFinal),
+        format('~nUnta ~s berpindah ke petak ~w~n', [Warna, HurufFinal])
     ;
         write('Gagal! Anda sudah melakukan aksi.'), nl
     ).

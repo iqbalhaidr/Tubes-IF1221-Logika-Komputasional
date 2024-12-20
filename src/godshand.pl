@@ -4,8 +4,11 @@ godhand :-
         write('TUHAN TELAH BERSABDA BERSIAPLAH KALIAN!!'), nl,
         pilih_asal(Asal), 
         (   ada_unta_di_petak(Asal, DaftarUnta), length(DaftarUnta, L), L \= 0 -> 
-            random_tujuan(Asal, 16, Tujuan), 
-            write('Tuhan memindahkan unta dari petak '), write(Asal), write(' ke '), write(Tujuan),nl,
+            random_tujuan(Asal, 16, Tujuan),
+            intToStrGod(Asal, HAsal), intToStrGod(Tujuan, HTujuan),
+            (Tujuan == 0 -> 
+                format('Tuhan memindahkan unta dari petak ~w ke ~s.~n', [HAsal, HTujuan])
+            ; format('Tuhan memindahkan unta dari petak ~w ke ~w.~n', [HAsal, HTujuan])),
             pindahkan_unta(Asal, Tujuan),
             cek_map
         ;
@@ -15,6 +18,10 @@ godhand :-
         write('God\'s Hand tidak terjadi kali ini.'), nl
     )
     .
+
+intToStrGod(Angka, Huruf) :-
+    (Angka == 0 -> Huruf = "Start"
+    ; HurufCode is Angka + 64, char_code(Huruf, HurufCode)).
 
 pilih_asal(Asal) :-
     random(0, 16, Asal). 
