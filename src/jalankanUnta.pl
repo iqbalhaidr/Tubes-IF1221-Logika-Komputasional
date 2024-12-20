@@ -9,28 +9,41 @@ kocokDadu(Warna, Angka) :-
     ;
         true).
 
+getNameFromUrutan([Head|_], 1, Head) :- !.
+getNameFromUrutan([_|Tail], Idx, Name) :-
+    Idx1 is Idx-1,
+    getNameFromUrutan(Tail, Idx1, Name).
+
 /* Jalankan Unta */
 jalankanUnta :-
-    % currentPemain(NomorPemain),
-    pemain(NamaPemain, Poin, Trap, _),
-    kocokDadu(Warna, Angka),
-    format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
-    unta(Warna, Posisi, Tumpuk),
-    PosisiBaru is Posisi + Angka, 
-    retract(unta(Warna, Posisi, Tumpuk)), 
-    findall(UntaDiPetak, unta(_, PosisiBaru, UntaDiPetak), TumpukanBaru),
-    (TumpukanBaru = [] ->
-        asserta(unta(Warna, PosisiBaru, Tumpuk)) 
+    write('Jalankan unta\n'),
+    currentPemain(NomorPemain),
+    urutanPemain(UrutanPemain),
+    Idx is NomorPemain - 1,
+    getNameFromUrutan(UrutanPemain, Idx, NamaPemain),
+    pemain(NamaPemain, Poin, Trap, Action),
+    ( Action = belum ->
+        kocokDadu(Warna, Angka),
+        format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
+        unta(Warna, Posisi, Tumpuk),
+        PosisiBaru is Posisi + Angka, 
+        retract(unta(Warna, Posisi, Tumpuk)), 
+        findall(UntaDiPetak, unta(_, PosisiBaru, UntaDiPetak), TumpukanBaru),
+        (TumpukanBaru = [] ->
+            asserta(unta(Warna, PosisiBaru, Tumpuk)) 
+        ;
+            TumpukanBaru = [TumpukanPetakBaru],
+            append(TumpukanPetakBaru, [Warna|Tumpuk], TumpukanFinal),
+            asserta(unta(Warna, PosisiBaru, TumpukanFinal)) 
+        ),
+
+        NewPoin is Poin + 10,
+        retract(pemain(NamaPemain, Poin, Trap, Action)),
+        asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
+        format('Unta ~w berpindah ke petak ~d~n', [Warna, PosisiBaru])
     ;
-        TumpukanBaru = [TumpukanPetakBaru],
-        append(TumpukanPetakBaru, [Warna|Tumpuk], TumpukanFinal),
-        asserta(unta(Warna, PosisiBaru, TumpukanFinal)) 
-    ),
-    NewPoin is Poin + 10,
-    retract(pemain(NamaPemain, Poin, Trap, _)),
-    asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
-    format('Unta ~w berpindah ke petak ~d~n', [Warna, PosisiBaru]),
-    nextTurn. 
+        write('Gagal! Anda sudah melakukan aksi.'), nl
+    ).
 
 /* Tukar Unta */
 tukarUnta :-
@@ -51,14 +64,5 @@ tukarUnta :-
 
     format('Unta ~w dan ~w bertukar posisi...\n', [Warna1, Warna2]),
     format('Posisi sesudah unta ~w: ~d\n', [Warna1, Posisi2]),
-    format('Posisi sesudah unta ~w: ~d\n', [Warna2, Posisi1]),
-    nextTurn.
+    format('Posisi sesudah unta ~w: ~d\n', [Warna2, Posisi1]).
 
-/* Fungsi untuk melanjutkan ke giliran berikutnya */
-nextTurn :-
-    jumlahPemain(Jumlah),
-    currentPemain(Current),
-    Next is (Current mod Jumlah) + 1,
-    retract(currentPemain(Current)),
-    asserta(currentPemain(Next)),
-    format('Giliran pemain berikutnya: ~d~n', [Next]).

@@ -5,3 +5,4 @@
 :- include('./investasi_rule.pl').
 :- include('./pasangTrap.pl').
 :- include('./endgame.pl').
+:- include('./turncontrol.pl').
