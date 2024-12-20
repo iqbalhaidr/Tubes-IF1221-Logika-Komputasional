@@ -136,7 +136,7 @@ isKenaTrap(PosisiBaru, PosisiFinal) :-
     ; PosisiFinal = PosisiBaru).
 
 intToStrJalankan(Angka, Huruf) :-
-    (Angka == 0 -> Huruf = "Start"
+    (Angka == 0 -> Huruf = "START"
     ; HurufCode is Angka + 64, char_code(Huruf, HurufCode)).
 
 jalankanUnta :- 

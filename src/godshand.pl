@@ -11,8 +11,11 @@ godhand :-
             ; format('Tuhan memindahkan unta dari petak ~w ke ~w.~n', [HAsal, HTujuan])),
             pindahkan_unta(Asal, Tujuan),
             cek_map
-        ;
-            write('Tuhan mengurungkan niatnya karena tidak ada unta di petak '), write(Asal), nl
+        ;   
+            intToStrGod(Asal, HAsal),
+            (Asal == 0 -> 
+                format('Tuhan mengurungkan niatnya karena tidak ada unta di petak ~s.~n', [HAsal])
+            ; format('Tuhan mengurungkan niatnya karena tidak ada unta di petak ~w.~n', [HAsal])
         )
     ;
         write('God\'s Hand tidak terjadi kali ini.'), nl
@@ -20,7 +23,7 @@ godhand :-
     .
 
 intToStrGod(Angka, Huruf) :-
-    (Angka == 0 -> Huruf = "Start"
+    (Angka == 0 -> Huruf = "START"
     ; HurufCode is Angka + 64, char_code(Huruf, HurufCode)).
 
 pilih_asal(Asal) :-
