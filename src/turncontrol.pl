@@ -26,5 +26,5 @@ nextTurn :-
         write('Ada unta yang sampai di petak terakhir! Game akan berakhir.'), nl, nl,
         endgame
     ;
-        write('Giliran pemain berikutnya...'), nl
+        godhand, write('Giliran pemain berikutnya...'), nl
     ).

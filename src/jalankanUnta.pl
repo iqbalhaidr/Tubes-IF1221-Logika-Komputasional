@@ -1,62 +1,71 @@
-get_element_unta([Element|_], 0, Element).
-get_element_unta([_|Tail], Index, Element) :- 
+/* Define Helper */
+
+concateList([], List2, List2).
+concateList([H|T], List2, Result) :-
+    append([H], R, Result),
+    concateList(T, List2, R).
+
+getLength(List, Length) :-
+    length(List, Length).
+
+deleteElem([_|Tail], 0, Tail).
+deleteElem([Head|Tail], Index, [Head|UpdatedTail]) :-
     Index > 0,
     NewIndex is Index - 1,
-    get_element_unta(Tail, NewIndex, Element).
+    deleteElem(Tail, NewIndex, UpdatedTail).
 
-random_member(Element, List):-
-    length(List, Len),
-    random(0, Len, Chosen),
-    get_element_unta(List, Chosen, Element).
+deleteLastUnta([], []).
+deleteLastUnta(List, UpdatedList) :-
+    getLength(List, Length),
+    Index is Length - 1,
+    deleteElem(List, Index, UpdatedList).
 
-/* Mengocok Dadu */
-kocokDadu(Warna, Angka) :-
-    findall(W, dadu(W), DaduWarna), 
-    random_member(Warna, DaduWarna), 
-    random(1, 7, Angka), 
-    retract(dadu(Warna)), 
-    (DaduWarna == [Warna] -> 
-        forall(member(W, ["Merah", "Kuning", "Hijau", "Biru", "Putih"]), asserta(dadu(W)))
-    ;
-        true).
+lastUntaColor([X], X).
+lastUntaColor([_|Tail], Last) :-
+    lastUntaColor(Tail, Last).
 
-getNameFromUrutan([Head|_], 1, Head) :- !.
-getNameFromUrutan([_|Tail], Idx, Name) :-
-    Idx1 is Idx-1,
-    getNameFromUrutan(Tail, Idx1, Name).
-
-/* Jalankan Unta */
-jalankanUnta :-
-    write('Jalankan unta\n'),
-    currentPemain(NomorPemain),
-    urutanPemain(UrutanPemain),
-    getNameFromUrutan(UrutanPemain, NomorPemain, NamaPemain),
-    pemain(NamaPemain, Poin, Trap, Action),
-    ( Action == belum ->
-        kocokDadu(Warna, Angka),
-        format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
-        unta(Warna, Posisi, Tumpuk),
-        findPosisiMove(Warna, Posisi, Angka, PosisiBaru), 
-        retract(unta(Warna, Posisi, Tumpuk)), 
-        findall(UntaDiPetak, unta(_, PosisiBaru, UntaDiPetak), TumpukanBaru),
-        (TumpukanBaru = [] ->
-            asserta(unta(Warna, PosisiBaru, Tumpuk)) 
-        ;
-            TumpukanBaru = [TumpukanPetakBaru],
-            append(TumpukanPetakBaru, [Warna|Tumpuk], TumpukanFinal),
-            asserta(unta(Warna, PosisiBaru, TumpukanFinal)) 
-        ),
-
-        NewPoin is Poin + 10,
-        retract(pemain(NamaPemain, Poin, Trap, Action)),
-        asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
-        format('Unta ~w berpindah ke petak ~d~n', [Warna, PosisiBaru])
-    ;
-        write('Gagal! Anda sudah melakukan aksi.'), nl
+deleteUntil(_, [], []).
+deleteUntil(_, [], []).
+deleteUntil(Element, List, Result) :-
+    lastUntaColor(List, Color),
+    deleteLastUnta(List, DeletedLastList),
+    (   Color = Element ->
+        Result = DeletedLastList
+    ; 
+        deleteUntil(Element, DeletedLastList, Result)
     ).
 
-/* Helper Function */
-findPosisiMove(Warna, Posisi, Angka, PosisiBaru) :-
+kocokDaduv2(Warna, Angka) :-
+    findall(W, dadu(W), DaduWarna),
+    randomizeMember(Warna, DaduWarna),
+    length(DaduWarna, BanyakElem),
+    Elem is BanyakElem + 1,
+    random(1, Elem, Angka),
+    retract(dadu(Warna)),
+    (   DaduWarna = [Warna] ->
+        forall(member(W, ["Merah", "Kuning", "Hijau", "Biru", "Putih"]), 
+               asserta(dadu(W)))
+    ;
+        true
+    ).
+
+getUnta([Element|_], 0, Element).
+getUnta([_|Tail], Index, Element) :- 
+    Index > 0,
+    NewIndex is Index - 1,
+    getUnta(Tail, NewIndex, Element).
+
+randomizeMember(Element, List) :-
+    length(List, BanyakElem),
+    random(0, BanyakElem, Chosen),
+    getUnta(List, Chosen, Element).
+
+getNameFromUrutanv2([Head|_], 1, Head) :- !.
+getNameFromUrutanv2([_|Tail], Idx, Name) :-
+    Idx1 is Idx-1,
+    getNameFromUrutanv2(Tail, Idx1, Name).
+
+findPosisiMovev2(Warna, Posisi, Angka, PosisiBaru) :-
     (Warna == "Putih" -> 
         PosisiBaruTemp is Posisi - Angka,
         (PosisiBaruTemp < 1 ->
@@ -67,24 +76,83 @@ findPosisiMove(Warna, Posisi, Angka, PosisiBaru) :-
             PosisiBaru = 16
         ; PosisiBaru = PosisiBaruTemp)).
 
-/* Tukar Unta */
-tukarUnta :-
-    kocokDadu(Warna1, _), % Gunakan kocokDadu untuk memilih warna pertama
-    kocokDadu(Warna2, _), % Gunakan kocokDadu untuk memilih warna kedua
-    Warna1 \= Warna2, % Pastikan dua warna tidak sama
-    unta(Warna1, Posisi1, Tumpuk1),
-    unta(Warna2, Posisi2, Tumpuk2),
-    format('Kocok dadu...\nWarna unta 1: ~w\nWarna unta 2: ~w\n', [Warna1, Warna2]),
-    format('Posisi sebelum unta ~w: ~d\n', [Warna1, Posisi1]),
-    format('Posisi sebelum unta ~w: ~d\n', [Warna2, Posisi2]),
+updateChildStackMovedUnta([],_).
+updateChildStackMovedUnta(StackInUntaWhoMove, Dest):-
+    lastUntaColor(StackInUntaWhoMove, LastUnta),
+    deleteLastUnta(StackInUntaWhoMove, DeletedLis),
+    retract(unta(LastUnta,_,Stack)),
+    asserta(unta(LastUnta,Dest, Stack)),
+    updateChildStackMovedUnta(DeletedLis, Dest).
 
-    % Tukar posisi dan tumpukan unta
-    retract(unta(Warna1, Posisi1, Tumpuk1)),
-    retract(unta(Warna2, Posisi2, Tumpuk2)),
-    asserta(unta(Warna1, Posisi2, Tumpuk1)),
-    asserta(unta(Warna2, Posisi1, Tumpuk2)),
+updateSourceStackUnta(_, _, []).
+updateSourceStackUnta(UntaWhoMove, Source, ListOfUntaInSource) :-
+    lastUntaColor(ListOfUntaInSource, LastUnta),
+    deleteLastUnta(ListOfUntaInSource, _),
+    unta(LastUnta, _, Stack),
+    retract(unta(LastUnta, Source, Stack)),
+    deleteUntil(UntaWhoMove, Stack, Result),
+    asserta(unta(LastUnta, Source, Result)),
+    (   LastUnta = UntaWhoMove ->
+        true
+    ; 
+        updateSourceStackUnta(UntaWhoMove, Source, _)
+    ).
 
-    format('Unta ~w dan ~w bertukar posisi...\n', [Warna1, Warna2]),
-    format('Posisi sesudah unta ~w: ~d\n', [Warna1, Posisi2]),
-    format('Posisi sesudah unta ~w: ~d\n', [Warna2, Posisi1]).
+updateStackDestination(_, _, []).
+updateStackDestination(ConcatenatedUntaWhoMove, Destination, ListOfUntaInDestination) :-
+    lastUntaColor(ListOfUntaInDestination, LastUnta),
+    deleteLastUnta(ListOfUntaInDestination, Res),
+    retract(unta(LastUnta, _, Stack)),
+    concateList(Stack, ConcatenatedUntaWhoMove, NewStack),
+    asserta(unta(LastUnta, Destination, NewStack)),
+    updateStackDestination(ConcatenatedUntaWhoMove, Destination, Res).
 
+moveSpesificUntaFromTile(UntaWhoMove, Source, Destination) :-
+    retract(unta(UntaWhoMove, Source, Stack)),
+    findall(UntaSource, unta(UntaSource, Source, _), ListUntainSource),
+    findall(UntaInDestination, unta(UntaInDestination, Destination, _), ListUntainDest),
+    asserta(unta(UntaWhoMove, Destination, Stack)),
+    concateList([UntaWhoMove], Stack, ConcatedStack),
+    updateSourceStackUnta(UntaWhoMove, Source, ListUntainSource),
+    updateStackDestination(ConcatedStack, Destination, ListUntainDest),
+    updateChildStackMovedUnta(Stack,Destination).
+
+/* Helper Function */
+
+tambahPoinJalankan(Pemain, Tambahan) :-
+    pemain(Pemain, Poin, Trap, Action),
+    Poin1 is Poin + Tambahan,
+    retract(pemain(Pemain, Poin, Trap, Action)),
+    asserta(pemain(Pemain, Poin1, Trap, Action)).
+
+isKenaTrap(PosisiBaru, PosisiFinal) :-
+    (trap(Jenis, PosisiBaru, Pemilik) -> 
+        format('~nTIDAAK, unta terkena trap. Unta ~a 1 langkah~n', [Jenis]),
+        tambahPoinJalankan(Pemilik, 10),
+        retract(trap(Jenis, PosisiBaru, Pemilik)),
+        (Jenis == maju -> 
+            PosisiFinal is PosisiBaru + 1
+        ; PosisiFinal is PosisiBaru - 1)
+    ; PosisiFinal = PosisiBaru).
+
+jalankanUnta :- 
+    write('Jalankan unta\n'),
+    currentPemain(NomorPemain),
+    urutanPemain(UrutanPemain),
+    getNameFromUrutanv2(UrutanPemain, NomorPemain, NamaPemain),
+    pemain(NamaPemain, Poin, Trap, Action),
+    (   Action = belum ->
+        kocokDaduv2(Warna, Angka),
+        format('Dadu warna: ~s, Dadu angka: ~d', [Warna, Angka]),
+        unta(Warna, Posisi, _),
+        findPosisiMovev2(Warna, Posisi, Angka, PosisiBaru), nl,
+        isKenaTrap(PosisiBaru, PosisiFinal),
+        moveSpesificUntaFromTile(Warna,Posisi, PosisiFinal),
+
+        NewPoin is Poin + 10,
+        retract(pemain(NamaPemain, Poin, Trap, Action)),
+        asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
+        format('~nUnta ~s berpindah ke petak ~d~n', [Warna, PosisiFinal])
+    ;
+        write('Gagal! Anda sudah melakukan aksi.'), nl
+    ).
