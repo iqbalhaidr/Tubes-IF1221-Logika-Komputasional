@@ -2,10 +2,17 @@
 /* Validate Input From User */
 validasi_warna_kartu(Warna) :-
     kartu(Warna, _), !.  
-validasi_warna_kartu(_) :-
-    write('Gagal! putih bukan warna unta yang valid.'), nl,
+validasi_warna_kartu(Warna) :-
+    format('Gagal! ~w bukan warna unta yang valid.', [Warna]), nl,
     write('Silakan pilih warna yang valid (merah, kuning, hijau, biru).'), nl,
     fail. 
+
+/* Mengambil Element berdasarkan Index */
+get_element([Element|_], 0, Element).
+get_element([_|Tail], Index, Element) :- 
+    Index > 0,
+    NewIndex is Index - 1,
+    get_element(Tail, NewIndex, Element).
 
 /* Validate Existence of User Kartu */
 cek_kartu(Warna, Nama) :-
@@ -39,6 +46,7 @@ tampilkan_investasi(Warna) :-
 
 /* Display one papan_investasi */
 tampilkan_investasi_table(Warna) :-
+
     write('+---------------------+'), nl,
     write('|   INVESTASI UNTA    |'), nl,
     write('+---------------------+'), nl,
@@ -46,12 +54,16 @@ tampilkan_investasi_table(Warna) :-
 
 /* Display All papan_investasi */
 papan_investasi :-
+    write('Papan investasi pada unta merah'), nl,
     tampilkan_investasi_table(merah), 
-    nl,                                
+    nl,                         
+    write('Papan investasi pada unta kuning'), nl,       
     tampilkan_investasi_table(kuning),  
-    nl,                                  
+    nl,            
+    write('Papan investasi pada unta hijau'), nl,                      
     tampilkan_investasi_table(hijau),  
-    nl,                                  
+    nl,                 
+    write('Papan investasi pada unta biru'), nl,                 
     tampilkan_investasi_table(biru), 
     nl.    
 
@@ -60,16 +72,18 @@ investasi:-
     currentPemain(NomorPemain),
     urutanPemain(ListOfUrutan),
     Index is NomorPemain-1,
-    nth0(Index, ListOfUrutan, Nama),
+    get_element(ListOfUrutan, Index, Nama),
     write('Pilih warna unta untuk investasi (merah, kuning, hijau, biru): '),
     read(Warna),
     (   validasi_warna_kartu(Warna) ->
         (   cek_kartu(Warna, Nama) ->
             pakai_kartu(Nama, Warna),
             !, 
+            format('Papan investasi pada unta ~w saat ini:', [Warna]), nl,
             tampilkan_investasi_table(Warna) 
         ;   gagal_pakai_kartu(Nama, Warna),
             !, 
+            format('Papan investasi pada unta ~w saat ini:', [Warna]), nl,
             tampilkan_investasi_table(Warna)
         )
     ;   fail  
