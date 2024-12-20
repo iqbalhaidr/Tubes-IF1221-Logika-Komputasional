@@ -45,11 +45,11 @@ ronde(1).
 /* Warna : string, Posisi : integer, Tumpuk : List of WarnaUnta string */
 /* Posisi unta pada awal game seperti berikut */
 :- dynamic(unta/3).
-unta("Merah", 0, []).
-unta("Kuning", 0, []).
-unta("Hijau", 0, []).
-unta("Biru", 0, []). 
-unta("Putih", 16, []).
+unta("Merah", 0, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]).
+unta("Kuning", 0, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]).
+unta("Hijau", 0, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]).
+unta("Biru", 0, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]). 
+unta("Putih", 16, ["Biru", "Kuning", "Hijau", "Merah", "Putih"]).
 
 /* jumlahPemain(Jumlah) */
 /* Jumlah : integer */
