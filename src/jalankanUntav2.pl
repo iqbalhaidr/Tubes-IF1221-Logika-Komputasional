@@ -1,7 +1,8 @@
 /* Define Helper */
 
-concateList(Element, [], [Element]).
-concateList(Element, List, [Element | List]).
+concatList([], List2, List2).
+concatList([H|T], List2, [H|Result]) :-
+    concatList(T, List2, Result).
 
 getLength(List, Length) :-
     length(List, Length).
@@ -73,9 +74,18 @@ findPosisiMovev2(Warna, Posisi, Angka, PosisiBaru) :-
             PosisiBaru = 16
         ; PosisiBaru = PosisiBaruTemp)).
 
+updateChildStackMovedUnta([],_).
+updateChildStackMovedUnta(StackInUntaWhoMove, Dest):-
+    lastUntaColor(StackInUntaWhoMove, LastUnta),
+    deleteLastUnta(StackInUntaWhoMove, DeletedLis),
+    retract(unta(LastUnta,_,Stack)),
+    asserta(unta(LastUnta,Dest, Stack)),
+    updateChildStackMovedUnta(DeletedLis, Dest).
+
 updateSourceStackUnta(_, _, []).
 updateSourceStackUnta(UntaWhoMove, Source, ListOfUntaInSource) :-
     lastUntaColor(ListOfUntaInSource, LastUnta),
+    deleteLastUnta(ListOfUntaInSource, DeletedList),
     unta(LastUnta, _, Stack),
     retract(unta(LastUnta, Source, Stack)),
     deleteUntil(UntaWhoMove, Stack, Result),
@@ -83,7 +93,7 @@ updateSourceStackUnta(UntaWhoMove, Source, ListOfUntaInSource) :-
     (   LastUnta = UntaWhoMove ->
         true
     ; 
-        deleteUntil(Element, Result, _)
+        updateSourceStackUnta(UntaWhoMove, Source, ListOfUntaInDestination)
     ).
 
 updateStackDestination(_, _, []).
@@ -96,13 +106,14 @@ updateStackDestination(ConcatenatedUntaWhoMove, Destination, ListOfUntaInDestina
     updateStackDestination(ConcatenatedUntaWhoMove, Destination, Res).
 
 moveSpesificUntaFromTile(UntaWhoMove, Source, Destination) :-
+    retract(unta(UntaWhoMove, Source, Stack)),
     findall(UntaSource, unta(UntaSource, Source, _), ListUntainSource),
     findall(UntaInDestination, unta(UntaInDestination, Destination, _), ListUntainDest),
-    retract(unta(UntaWhoMove, Source, Stack)),
     asserta(unta(UntaWhoMove, Destination, Stack)),
     concateList(UntaWhoMove, Stack, ConcatedStack),
     updateSourceStackUnta(UntaWhoMove, Source, ListUntainSource),
-    updateStackDestination(ConcatedStack, Destination, ListUntainDest).
+    updateStackDestination(ConcatedStack, Destination, ListUntainDest),
+    updateChildStackMovedUnta(Stack,Destination).
 
 jalankanUntav2 :- 
     write('Jalankan unta\n'),
