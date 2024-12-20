@@ -42,7 +42,7 @@ deleteElementEndgame([Head|Tail], Index, [Head|UpdatedTail]) :-
 listUrutanUntaTanpaPutih(ListFinal) :-
     urutanUnta(P1, P2, P3, P4, P5),
     ListTemp = [P1, P2, P3, P4, P5],
-    find_index_of_element(ListTemp, Idx, 'Putih'),
+    find_index_of_element(ListTemp, Idx, "Putih"),
     deleteElementEndgame(ListTemp, Idx, ListFinal).
 
 poinUtama(1, 50).
