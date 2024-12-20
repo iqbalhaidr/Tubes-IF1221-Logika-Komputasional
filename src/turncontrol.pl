@@ -1,3 +1,9 @@
+revertAction :-
+    pemain(Nama, Poin, Trap, Action),
+    retract(pemain(Nama, Poin, Trap, Action)),
+    asserta(pemain(Nama, Poin, Trap, belum)),
+    fail.
+
 
 /* Fungsi untuk melanjutkan ke giliran berikutnya */
 nextTurn :-
@@ -9,7 +15,9 @@ nextTurn :-
     ( Next =:= 1 -> 
         retract(ronde(Round)),
         NewRound is Round + 1,
-        asserta(ronde(NewRound))
+        asserta(ronde(NewRound)),
+
+        revertAction
     ),
     ( unta(_, 16, _) -> 
         write('Ada unta yang sampai di petak terakhir! Game akan berakhir.'), nl, nl,
