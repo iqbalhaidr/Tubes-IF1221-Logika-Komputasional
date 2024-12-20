@@ -37,10 +37,11 @@ _Di bawah ini adalah langkah menjalankan program pada terminal linux._
 ## Fitur
 
 * startGame (Inisialisasi)
-* turn
-* displayMap
+* cek_map
 * cek_info
 * investasi
+* papan_investasi
 * jalankanUnta
 * pasangTrap
-* next_turn
+* nextTurn
+* godsHand
