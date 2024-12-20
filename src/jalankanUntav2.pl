@@ -68,7 +68,10 @@ findPosisiMovev2(Warna, Posisi, Angka, PosisiBaru) :-
         (PosisiBaruTemp < 1 ->
             PosisiBaru = 1
         ; PosisiBaru = PosisiBaruTemp)
-    ; PosisiBaru is Posisi + Angka).
+    ; PosisiBaruTemp is Posisi + Angka,
+        (PosisiBaruTemp > 16 ->
+            PosisiBaru = 16
+        ; PosisiBaru = PosisiBaruTemp)).
 
 updateSourceStackUnta(_, _, []).
 updateSourceStackUnta(UntaWhoMove, Source, ListOfUntaInSource) :-
@@ -109,7 +112,7 @@ jalankanUntav2 :-
     pemain(NamaPemain, Poin, Trap, Action),
     (   Action = belum ->
         kocokDaduv2(Warna, Angka),
-        format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
+        format('Dadu warna: ~s, Dadu angka: ~d~n', [Warna, Angka]),
         unta(Warna, Posisi, Tumpuk),
         findPosisiMovev2(Warna, Posisi, Angka, PosisiBaru), 
         write('Jalankan unta\n'),
@@ -118,7 +121,7 @@ jalankanUntav2 :-
         NewPoin is Poin + 10,
         retract(pemain(NamaPemain, Poin, Trap, Action)),
         asserta(pemain(NamaPemain, NewPoin, Trap, jalankan_unta)),
-        format('Unta ~w berpindah ke petak ~d~n', [Warna, PosisiBaru])
+        format('Unta ~s berpindah ke petak ~d~n', [Warna, PosisiBaru])
     ;
         write('Gagal! Anda sudah melakukan aksi.'), nl
     ).
