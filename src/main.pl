@@ -4,3 +4,4 @@
 :- include('./jalankanUnta.pl').
 :- include('./pasangTrap.pl').
 :- include('./endgame.pl').
+:- include('./godshand.pl').

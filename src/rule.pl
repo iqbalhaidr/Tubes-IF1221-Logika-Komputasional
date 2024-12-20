@@ -181,4 +181,4 @@ startGame :-
     displayKartuPemain, nl,
     displayPoinPemain, nl,
     displayTrapPemain,
-    currentPemain(1).
+    asserta(currentPemain(1)).
