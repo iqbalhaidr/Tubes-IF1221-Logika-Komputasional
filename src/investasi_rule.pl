@@ -73,20 +73,27 @@ investasi:-
     urutanPemain(ListOfUrutan),
     Index is NomorPemain-1,
     get_element(ListOfUrutan, Index, Nama),
-    write('Pilih warna unta untuk investasi (merah, kuning, hijau, biru): '),
-    read(Warna),
-    (   validasi_warna_kartu(Warna) ->
-        (   cek_kartu(Warna, Nama) ->
-            pakai_kartu(Nama, Warna),
-            !, 
-            format('Papan investasi pada unta ~w saat ini:', [Warna]), nl,
-            tampilkan_investasi_table(Warna) 
-        ;   gagal_pakai_kartu(Nama, Warna),
-            !, 
-            format('Papan investasi pada unta ~w saat ini:', [Warna]), nl,
-            tampilkan_investasi_table(Warna)
+    pemain(Nama, Poin, Trap, Action),
+    ( Action = belum ->
+        write('Pilih warna unta untuk investasi (merah, kuning, hijau, biru): '),
+        read(Warna),
+        (   validasi_warna_kartu(Warna) ->
+            (   cek_kartu(Warna, Nama) ->
+                pakai_kartu(Nama, Warna),
+                retract(pemain(Nama, Poin, Trap, Action)),
+                asserta(pemain(Nama, Poin, Trap, investasi)),
+                !, 
+                tampilkan_investasi_table(Warna) 
+            ;   
+                gagal_pakai_kartu(Nama, Warna),
+                !, 
+                tampilkan_investasi_table(Warna)
+            )
+        ;   
+            fail
         )
-    ;   fail  
+    ;
+        write('Gagal! Anda sudah melakukan aksi.'), nl
     ).
 
 

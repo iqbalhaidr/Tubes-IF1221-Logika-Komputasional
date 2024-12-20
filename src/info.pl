@@ -16,7 +16,7 @@ display_kartu_pemain_list([Head|Tail]) :-
 cek_info :-
     write('Masukkan nama pemain: '),
     read(Nama),
-    ( pemain(Nama, Poin, Trap, Action) ->
+    ( pemain(Nama, Poin, Trap, _) ->
         write('Pemain '), write(Nama), nl,
         write('Poin  : '), write(Poin), nl,
         write('Kartu : '), display_kartu_pemain(Nama),

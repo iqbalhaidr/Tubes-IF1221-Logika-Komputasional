@@ -153,3 +153,4 @@ tambahPoinEndgame(Pemain, Tambahan) :-
     asserta(pemain(Pemain, Poin1, Trap, Action)).
 
 /* ======================================================================= */
+

@@ -67,18 +67,24 @@ pasangTrap :-
     Idx is NomorPemain-1,
     getElmtTrap(ListNomorPemain, Idx, NamaPemain),
     pemain(NamaPemain, Poin, Trap, Action),
-    format('~nMasukkan kode petak (KAPITAL dengan kutip satu): ', []), read(Location),
-    format('Masukan jenis trap (maju/mundur): ', []), read(JenisTrap),
-    isTrapLocValid(Location, CheckLoc), isJenisTrapValid(JenisTrap, CheckJenis), isPlayerHasTrap(NamaPemain, CheckHas),
-    
-    ((CheckLoc, CheckJenis, CheckHas) -> 
-        Trap1 is Trap - 1,
-        converterLocToInt(Location, LocInt),
-        retract(pemain(NamaPemain, Poin, Trap, Action)),
-        asserta(pemain(NamaPemain, Poin, Trap1, Action)),
-        asserta(trap(JenisTrap, LocInt, NamaPemain)),
-        successMessageTrap(NamaPemain)
-    ; failMessageTrap(NamaPemain)).
+    ( Action = belum -> 
+        format('~nMasukkan kode petak (KAPITAL dengan kutip satu): ', []), read(Location),
+        format('Masukan jenis trap (maju/mundur): ', []), read(JenisTrap),
+        isTrapLocValid(Location, CheckLoc), isJenisTrapValid(JenisTrap, CheckJenis), isPlayerHasTrap(NamaPemain, CheckHas),
+        
+        ((CheckLoc, CheckJenis, CheckHas) -> 
+            Trap1 is Trap - 1,
+            ActionNew = pasang_trap,
+            converterLocToInt(Location, LocInt),
+            retract(pemain(NamaPemain, Poin, Trap, Action)),
+            asserta(pemain(NamaPemain, Poin, Trap1, ActionNew)),
+            asserta(trap(JenisTrap, LocInt, NamaPemain)),
+            successMessageTrap(NamaPemain)
+        ; 
+            failMessageTrap(NamaPemain))
+    ;
+        write('Gagal! Anda sudah melakukan aksi.'), nl
+    ).
 
 /* ================================================================================ */
 

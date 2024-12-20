@@ -25,17 +25,17 @@ poinInvestasi(4, 4, 0).
 /* dadu(Warna) */
 /* dadu akan dihapus satu persatu setelah dikocok. Lalu saat sudah habis akan ditambahkan lagi */
 :- dynamic(dadu/1).
-dadu("Merah").
-dadu("Kuning").
-dadu("Hijau").
-dadu("Biru").
-dadu("Putih").
+% dadu("Merah").
+% dadu("Kuning").
+% dadu("Hijau").
+% dadu("Biru").
+% dadu("Putih").
 
 /* ronde(Jumlah) */
 /* Jumlah akan diupdate setiap kali ronde selesai */
 /* Satu ronde selesai ketika semua dadu habis */
 :- dynamic(ronde/1).
-ronde(1).
+% ronde(1).
 
 /* kartu(Warna, NamaPemain) */
 /* Pada awalnya setiap pemain akan diberi 4 kartu berwarna */
@@ -45,11 +45,6 @@ ronde(1).
 /* Warna : string, Posisi : integer, Tumpuk : List of WarnaUnta string */
 /* Posisi unta pada awal game seperti berikut */
 :- dynamic(unta/3).
-unta("Merah", 0, []).
-unta("Kuning", 0, []).
-unta("Hijau", 0, []).
-unta("Biru", 0, []). 
-unta("Putih", 16, []).
 
 /* jumlahPemain(Jumlah) */
 /* Jumlah : integer */
@@ -71,16 +66,16 @@ unta("Putih", 16, []).
 /* urutanInvestasi(WarnaUnta, Urutan) */
 /* WarnaUnta : string, Urutan : List of NamaPemain string */
 :- dynamic(urutanInvestasi/2).
-urutanInvestasi(merah, []).
-urutanInvestasi(kuning, []).
-urutanInvestasi(hijau, []).
-urutanInvestasi(biru, []).
+% urutanInvestasi(merah, []).
+% urutanInvestasi(kuning, []).
+% urutanInvestasi(hijau, []).
+% urutanInvestasi(biru, []).
 
 /* urutanUnta(Pertama, Kedua, Ketiga, Keempat, Kelima) */
 /* Pertama, Kedua, Ketiga, Keempat, Kelima : WarnaUnta string */
 /* Urutan unta pada awal game seperti berikut */
 :- dynamic(urutanUnta/5).
-urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
+% urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 
 /* trap(KiriAtauKana, Posisi, Pemilik) */
 /* KiriAtauKanan : string, Posisi : integer, Pemilik : NamaPemain string */
@@ -90,4 +85,4 @@ urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
 /* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
 :- dynamic(currentPemain/1).
 
-currentPemain(1).
+% currentPemain(1).
