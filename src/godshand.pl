@@ -15,7 +15,7 @@ godhand :-
             intToStrGod(Asal, HAsal),
             (Asal == 0 -> 
                 format('Tuhan mengurungkan niatnya karena tidak ada unta di petak ~s.~n', [HAsal])
-            ; format('Tuhan mengurungkan niatnya karena tidak ada unta di petak ~w.~n', [HAsal])
+            ; format('Tuhan mengurungkan niatnya karena tidak ada unta di petak ~w.~n', [HAsal]))
         )
     ;
         write('God\'s Hand tidak terjadi kali ini.'), nl
