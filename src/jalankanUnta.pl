@@ -11,7 +11,7 @@ kocokDadu(Warna, Angka) :-
 
 /* Jalankan Unta */
 jalankanUnta :-
-    currentPemain(NomorPemain),
+    % currentPemain(NomorPemain),
     pemain(NamaPemain, Poin, Trap, _),
     kocokDadu(Warna, Angka),
     format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
