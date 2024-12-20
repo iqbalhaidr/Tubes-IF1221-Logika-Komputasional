@@ -81,12 +81,17 @@ getElmt([_|Tail], Idx, Elmt) :-
     Idx1 is Idx-1,
     getElmt(Tail, Idx1, Elmt).
 
+mySelect(Elem, [Elem|Tail], Tail).
+mySelect(Elem, [Head|Tail], [Head|Result]) :-
+    Elem \= Head,
+    mySelect(Elem, Tail, Result).
+
 random_permutation([], []).
 random_permutation(List, [Elmt|Rest]) :-
     length(List, Len),
     random(0, Len, Index),
     getElmt(List, Index, Elmt),
-    select(Elmt, List, NewList),
+    mySelect(Elmt, List, NewList),
     random_permutation(NewList, Rest).
 
 generateUrutanPemain :-
@@ -110,10 +115,10 @@ displayUrutanPemain :-
 
 inputKartuPemain([]).
 inputKartuPemain([Head|Tail]) :-
-    asserta(kartu(merah, Head)),
-    asserta(kartu(kuning, Head)),
-    asserta(kartu(hijau, Head)),
-    asserta(kartu(biru, Head)),
+    assertz(kartu(merah, Head)),
+    assertz(kartu(kuning, Head)),
+    assertz(kartu(hijau, Head)),
+    assertz(kartu(biru, Head)),
     inputKartuPemain(Tail).
 
 generateKartuPemain :-
@@ -126,14 +131,14 @@ displayKartuPemain :-
 
 displayKartuPemain([]).
 displayKartuPemain([Head|Tail]) :-
-    format('Kartu ~w: .', [Head]),
+    format('Kartu ~w: ', [Head]),
     findall(Warna, kartu(Warna, Head), ListKartu),
     displayKartu(ListKartu), nl,
     displayKartuPemain(Tail).
 
 displayKartu([]).
 displayKartu([Card]) :-
-    write(Card), !.
+    format('~w.', [Card]), !.
 displayKartu([Card|Rest]) :-
     write(Card), write(', '),
     displayKartu(Rest).
@@ -176,3 +181,73 @@ startGame :-
     displayPoinPemain, nl,
     displayTrapPemain,
     currentPemain(1).
+
+/* dadu(Warna) */
+/* dadu akan dihapus satu persatu setelah dikocok. Lalu saat sudah habis akan ditambahkan lagi */
+:- dynamic(dadu/1).
+dadu("Merah").
+dadu("Kuning").
+dadu("Hijau").
+dadu("Biru").
+dadu("Putih").
+
+/* ronde(Jumlah) */
+/* Jumlah akan diupdate setiap kali ronde selesai */
+/* Satu ronde selesai ketika semua dadu habis */
+:- dynamic(ronde/1).
+ronde(1).
+
+/* kartu(Warna, NamaPemain) */
+/* Pada awalnya setiap pemain akan diberi 4 kartu berwarna */
+:- dynamic(kartu/2).
+
+/* unta(Warna, Posisi, Tumpuk) */
+/* Warna : string, Posisi : integer, Tumpuk : List of WarnaUnta string */
+/* Posisi unta pada awal game seperti berikut */
+:- dynamic(unta/3).
+unta("Merah", 0, []).
+unta("Kuning", 0, []).
+unta("Hijau", 0, []).
+unta("Biru", 0, []). 
+unta("Putih", 16, []).
+
+/* jumlahPemain(Jumlah) */
+/* Jumlah : integer */
+/* Jumlah pemain akan diinputkan oleh user */
+:- dynamic(jumlahPemain/1).
+
+/* pemain(Nama, Poin, Trap, Action) */
+/* Nama : string, Poin : integer, Trap : integer, Action : string */
+/* Poin memiliki nilai inisial */
+/* Trap menyimpan jumlah trap yang dimiliki pemain */
+/* Action akan diupdate setiap kali pemain melakukan aksi */
+/* Jika belum melakukan aksi, Action = "Belum" */
+:- dynamic(pemain/4).
+
+/* urutanPemain(Urutan) */
+/* Urutan : List of NamaPemain string */
+:- dynamic(urutanPemain/1).
+
+/* urutanInvestasi(WarnaUnta, Urutan) */
+/* WarnaUnta : string, Urutan : List of NamaPemain string */
+:- dynamic(urutanInvestasi/2).
+urutanInvestasi(merah, []).
+urutanInvestasi(kuning, []).
+urutanInvestasi(hijau, []).
+urutanInvestasi(biru, []).
+
+/* urutanUnta(Pertama, Kedua, Ketiga, Keempat, Kelima) */
+/* Pertama, Kedua, Ketiga, Keempat, Kelima : WarnaUnta string */
+/* Urutan unta pada awal game seperti berikut */
+:- dynamic(urutanUnta/5).
+urutanUnta("Merah", "Kuning", "Hijau", "Biru", "Putih").
+
+/* trap(KiriAtauKana, Posisi, Pemilik) */
+/* KiriAtauKanan : string, Posisi : integer, Pemilik : NamaPemain string */
+:- dynamic(trap/3).
+
+/* currentPemain(NomorPemain) */
+/* Menunjukkan giliran pemain saat ini dengan NomorPemain 1-jumlahPemain */
+:- dynamic(currentPemain/1).
+
+currentPemain(1).
