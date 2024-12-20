@@ -159,19 +159,19 @@ get_trap_in_tile(Pos, Res) :-
     ( trap(Dir, Pos, _) -> 
         ( (Dir = 'maju', Pos < 4) -> 
             Res = ('>>>')
-        ; (Dir = 'maju', Pos < 9) ->
+        ; (Dir = 'maju', Pos < 8) ->
             Res = ('vvv')
         ; (Dir = 'maju', Pos < 12) ->
             Res = ('<<<')
         ; (Dir = 'maju', Pos >= 12) ->
             Res = ('^^^')
-        ; (Dir = 'mundur', Pos < 4) ->
+        ; (Dir = 'mundur', Pos < 5) ->
             Res = ('<<<')
         ; (Dir = 'mundur', Pos < 9) ->
             Res = ('^^^')
-        ; (Dir = 'mundur', Pos < 12) ->
+        ; (Dir = 'mundur', Pos < 13) ->
             Res = ('>>>')
-        ; (Dir = 'mundur', Pos >= 12) ->
+        ; (Dir = 'mundur', Pos >= 13) ->
             Res = ('vvv')
         )
     ;
