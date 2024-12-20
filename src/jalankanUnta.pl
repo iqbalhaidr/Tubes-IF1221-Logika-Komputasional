@@ -5,7 +5,8 @@ get_element_unta([_|Tail], Index, Element) :-
     get_element_unta(Tail, NewIndex, Element).
 
 random_member(Element, List):-
-    random(0,5, Chosen),
+    length(List, Len),
+    random(0, Len, Chosen),
     get_element_unta(List, Chosen, Element).
 
 /* Mengocok Dadu */
@@ -31,11 +32,11 @@ jalankanUnta :-
     urutanPemain(UrutanPemain),
     getNameFromUrutan(UrutanPemain, NomorPemain, NamaPemain),
     pemain(NamaPemain, Poin, Trap, Action),
-    ( Action = belum ->
+    ( Action == belum ->
         kocokDadu(Warna, Angka),
         format('Dadu warna: ~w, Dadu angka: ~d~n', [Warna, Angka]),
         unta(Warna, Posisi, Tumpuk),
-        PosisiBaru is Posisi + Angka, 
+        findPosisiMove(Warna, Posisi, Angka, PosisiBaru), 
         retract(unta(Warna, Posisi, Tumpuk)), 
         findall(UntaDiPetak, unta(_, PosisiBaru, UntaDiPetak), TumpukanBaru),
         (TumpukanBaru = [] ->
@@ -53,6 +54,15 @@ jalankanUnta :-
     ;
         write('Gagal! Anda sudah melakukan aksi.'), nl
     ).
+
+/* Helper Function */
+findPosisiMove(Warna, Posisi, Angka, PosisiBaru) :-
+    (Warna == "Putih" -> 
+        PosisiBaruTemp is Posisi - Angka,
+        (PosisiBaruTemp < 1 ->
+            PosisiBaru = 1
+        ; PosisiBaru = PosisiBaruTemp)
+    ; PosisiBaru is Posisi + Angka).
 
 /* Tukar Unta */
 tukarUnta :-
