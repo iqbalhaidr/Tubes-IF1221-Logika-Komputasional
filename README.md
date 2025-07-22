@@ -1,4 +1,4 @@
-# Tugas Besar IF1221 Logika Komputasional 2024
+# Tugas Besar IF1221 Logika Komputasional 2024/2025
 
 ### Kelompok K01-G15
 | NIM      | Nama                      |
